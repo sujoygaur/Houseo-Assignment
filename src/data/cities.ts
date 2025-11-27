@@ -9,4 +9,13 @@ export const cities = [
   { value: 'san-diego', label: 'San Diego' },
   { value: 'dallas', label: 'Dallas' },
   { value: 'san-jose', label: 'San Jose' },
+  { value: 'austin', label: 'Austin' },
+  { value: 'jacksonville', label: 'Jacksonville' },
+  { value: 'fort-worth', label: 'Fort Worth' },
+  { value: 'columbus', label: 'Columbus' },
+  { value: 'charlotte', label: 'Charlotte' },
+  { value: 'indianapolis', label: 'Indianapolis' },
+  { value: 'seattle', label: 'Seattle' },
+  { value: 'denver', label: 'Denver' },
+  { value: 'washington-dc', label: 'Washington DC' },
 ]

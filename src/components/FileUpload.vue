@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- //File Upload Area Starts Here -->
     <Field name="files" v-slot="{ field }">
       <div class="file-upload-area" :class="{ 'dragover': isDragging }" @drop="handleDrop($event, field.onChange)"
         @dragover.prevent="isDragging = true" @dragleave="isDragging = false" @click="triggerFileInput">
@@ -26,28 +27,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { Field, ErrorMessage, useField } from 'vee-validate'
+import { ref } from 'vue'
+import { Field, ErrorMessage } from 'vee-validate'
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const files = ref<File[]>([])
 const isDragging = ref(false)
 
-const { value: fieldValue } = useField<File[]>('files')
-
-watch(fieldValue, (newValue) => {
-  if (!newValue || newValue.length === 0) {
-    files.value = []
-    if (fileInput.value) {
-      fileInput.value.value = ''
-    }
-  }
-})
-
 const triggerFileInput = () => {
   fileInput.value?.click()
 }
 
+// Handle File Change
 const handleFileChange = (event: Event, onChange: (value: File[]) => void) => {
   const target = event.target as HTMLInputElement
   if (target.files) {
@@ -58,6 +49,7 @@ const handleFileChange = (event: Event, onChange: (value: File[]) => void) => {
   }
 }
 
+// Handle Drop
 const handleDrop = (event: DragEvent, onChange: (value: File[]) => void) => {
   event.preventDefault()
   isDragging.value = false
@@ -70,6 +62,7 @@ const handleDrop = (event: DragEvent, onChange: (value: File[]) => void) => {
   }
 }
 
+// Remove File
 const removeFile = (index: number, onChange: (value: File[]) => void) => {
   files.value.splice(index, 1)
   onChange([...files.value])

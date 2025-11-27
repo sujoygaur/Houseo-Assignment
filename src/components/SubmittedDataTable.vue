@@ -37,7 +37,7 @@
             </td>
             <td>
               <span v-for="(city, index) in item.cities" :key="index" class="badge bg-secondary me-1">
-                {{ getCityLabel(city) }}
+                {{ city }}
               </span>
             </td>
             <td>
@@ -64,8 +64,4 @@ interface Props {
 
 defineProps<Props>()
 
-const getCityLabel = (cityValue: string): string => {
-  const city = cities.find(c => c.value === cityValue)
-  return city ? city.label : cityValue
-}
 </script>

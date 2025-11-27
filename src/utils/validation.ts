@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 import { toTypedSchema } from '@vee-validate/yup'
 
+// Group Field validation
 export const groupFieldSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   email: yup.string().required('Email is required').email('Please enter a valid email address'),
@@ -14,6 +15,7 @@ export const groupFieldSchema = yup.object().shape({
     }),
 })
 
+// Form Validation Schema
 const yupFormSchema = yup.object().shape({
   groupFields: yup
     .array()

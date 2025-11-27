@@ -5,6 +5,7 @@
     </button>
 
     <div class="row">
+      <!-- //Name Starts Here -->
       <div class="col-md-4">
         <Field :name="`groupFields.${index}.name`" v-slot="{ field, meta, handleBlur, handleChange, errors }">
           <label :for="`name-${id}`" class="form-label">Name</label>
@@ -17,7 +18,8 @@
           <ErrorMessage :name="`groupFields.${index}.name`" class="error-message" />
         </Field>
       </div>
-
+      <!-- //Name Ends Here -->
+      <!-- //Email Starts Here -->
       <div class="col-md-4">
         <Field :name="`groupFields.${index}.email`" v-slot="{ field, meta, handleBlur, handleChange, errors }">
           <label :for="`email-${id}`" class="form-label">Email</label>
@@ -30,7 +32,8 @@
           <ErrorMessage :name="`groupFields.${index}.email`" class="error-message" />
         </Field>
       </div>
-
+      <!-- //Email Ends Here -->
+      <!-- //Mobile Number Starts Here -->  
       <div class="col-md-4">
         <Field :name="`groupFields.${index}.mobileNumber`" v-slot="{ field, meta, handleBlur, handleChange, errors }">
           <label :for="`mobile-${id}`" class="form-label">Mobile Number</label>
@@ -43,6 +46,7 @@
           <ErrorMessage :name="`groupFields.${index}.mobileNumber`" class="error-message" />
         </Field>
       </div>
+      <!-- //Mobile Number Ends Here -->
     </div>
   </div>
 </template>
@@ -63,6 +67,7 @@ defineEmits<{
   remove: []
 }>()
 
+// Handle Phone Input formatting
 const handlePhoneInput = (event: Event, handleChange: (value: string) => void) => {
   const target = event.target as HTMLInputElement
   const formatted = formatPhoneNumber(target.value)

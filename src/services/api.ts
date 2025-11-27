@@ -2,6 +2,7 @@ import type { FormData, SubmittedFormData } from '@/types/form'
 
 const STORAGE_KEY = 'submitted_forms'
 
+// Load Data from localStorage
 const loadData = (): SubmittedFormData[] => {
   try {
     const data = localStorage.getItem(STORAGE_KEY)
@@ -12,6 +13,7 @@ const loadData = (): SubmittedFormData[] => {
   }
 }
 
+// Save Data to localStorage
 const saveData = (data: SubmittedFormData[]): void => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
@@ -21,13 +23,15 @@ const saveData = (data: SubmittedFormData[]): void => {
   }
 }
 
+// Convert File to Object
 const convertFileToObject = (file: File) => ({
   name: file.name,
   type: file.type,
   size: file.size,
 })
 
-export const submitForm = async (formData: FormData)=> {
+// Submit Form
+  export const submitForm = async (formData: FormData)=> {
       try {
         const submittedData: SubmittedFormData = {
           id: Date.now().toString(),
@@ -49,6 +53,7 @@ export const submitForm = async (formData: FormData)=> {
       }
 }
 
+// Get Submitted Forms
 export const getSubmittedForms = async (): Promise<SubmittedFormData[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {

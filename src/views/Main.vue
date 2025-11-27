@@ -5,9 +5,10 @@
         <h1 class="mb-4 text-center">Form Assignment</h1>
 
         <div class="form-container">
-          <Form :initial-values="initialValues" :validation-schema="formSchema" @submit="handleSubmit" ref="formRef"
-            v-slot="{ meta: formMeta }">
+          <!-- //Form Starts Here -->
+          <Form :initial-values="initialValues" :validation-schema="formSchema" @submit="handleSubmit" ref="formRef">
             <h3 class="mb-4">Group Fields</h3>
+            <!-- //Group Fields Starts Here -->
             <FieldArray name="groupFields" v-slot="{ fields, push, remove }">
               <GroupFieldForm v-for="(field, index) in fields" :key="String(field.key)" :id="String(field.key)"
                 :index="index" :can-remove="fields.length > 2" @remove="remove(index)" />
@@ -17,9 +18,10 @@
               </button>
               <ErrorMessage name="groupFields" class="error-message d-block mt-2" />
             </FieldArray>
-
+            <!-- //Group Fields Ends Here -->
             <hr class="my-4" />
 
+            <!-- //Birth Date Starts Here -->
             <div class="form-group">
               <Field name="birthDate" v-slot="{ field, meta, handleBlur, handleChange }">
                 <label for="birthDate" class="form-label">Birth Date</label>
@@ -27,12 +29,10 @@
                   :class="{ 'is-invalid': (meta.touched || meta.validated) && !meta.valid }"
                   @input="(e) => handleChange((e.target as HTMLInputElement).value)" @blur="handleBlur" />
                 <ErrorMessage name="birthDate" class="error-message" />
-                <small v-if="field.value" class="text-muted d-block mt-1">
-                  Formatted: {{ formatDate(field.value) }}
-                </small>
               </Field>
             </div>
-
+            <!-- //Birth Date Ends Here -->
+            <!-- //Gender Starts Here -->
             <div class="form-group">
               <Field name="gender" v-slot="{ field }">
                 <label class="form-label">Gender</label>
@@ -59,7 +59,8 @@
                 <ErrorMessage name="gender" class="error-message" />
               </Field>
             </div>
-
+            <!-- //Gender Ends Here -->
+            <!-- //Languages Starts Here -->
             <div class="form-group">
               <Field name="languages" v-slot="{ field, errors }">
                 <label class="form-label">Languages</label>
@@ -93,34 +94,41 @@
                 <ErrorMessage name="languages" class="error-message" />
               </Field>
             </div>
-
+            <!-- //Languages Ends Here -->
+            <!-- //Cities Starts Here -->
             <div class="form-group">
               <Field name="cities" v-slot="{ field }">
                 <label for="cities" class="form-label">City</label>
                 <Multiselect id="cities" :model-value="field.value" :options="cityOptions" mode="tags"
-                  :close-on-select="false" placeholder="Select cities" @update:model-value="field.onChange" />
+                  :searchable="true" :close-on-select="false" placeholder="Select cities"
+                  @update:model-value="field.onChange" />
                 <ErrorMessage name="cities" class="error-message" />
               </Field>
             </div>
-
+            <!-- //Cities Ends Here -->
+            <!-- //File Upload Starts Here -->
             <div class="form-group">
               <label class="form-label">File Upload</label>
               <FileUpload />
             </div>
-
+            <!-- //File Upload Ends Here -->
+            <!-- //Submit Error Starts Here -->
             <div v-if="submitError" class="alert alert-danger" role="alert">
               {{ submitError }}
             </div>
-
+            <!-- //Submit Error Ends Here -->
+            <!-- //Submit Button Starts Here -->
             <div class="d-grid gap-2 mt-4">
               <button type="submit" class="btn btn-primary btn-lg" :disabled="isSubmitting">
                 <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"></span>
                 {{ isSubmitting ? 'Submitting...' : 'Submit Form' }}
               </button>
             </div>
+            <!-- //Submit Button Ends Here -->
           </Form>
+          <!-- //Form Ends Here -->
         </div>
-
+        <!-- // Data Table -->
         <SubmittedDataTable :submitted-data="submittedData" />
       </div>
     </div>
@@ -135,7 +143,6 @@ import GroupFieldForm from '@/components/GroupFieldForm.vue'
 import FileUpload from '@/components/FileUpload.vue'
 import SubmittedDataTable from '@/components/SubmittedDataTable.vue'
 import { formSchema } from '@/utils/validation'
-import { formatDate } from '@/utils/formatters'
 import { submitForm, getSubmittedForms } from '@/services/api'
 import { cities } from '@/data/cities'
 import type { FormData, SubmittedFormData, GroupField } from '@/types/form'
@@ -180,7 +187,7 @@ const addGroupField = (push: (value: GroupField) => void) => {
     mobileNumber: '',
   })
 }
-
+// Languages Change Handler
 const handleLanguageChange = (
   event: Event,
   currentValue: string[],
@@ -201,6 +208,7 @@ const handleLanguageChange = (
   onChange(newValue)
 }
 
+// Reset Form
 const resetForm = () => {
   if (formRef.value) {
     formRef.value.resetForm({
@@ -215,6 +223,7 @@ const resetForm = () => {
   }
 }
 
+// Submit Form
 const handleSubmit = async (values: any) => {
   isSubmitting.value = true
   submitError.value = ''
@@ -240,6 +249,7 @@ const handleSubmit = async (values: any) => {
   }
 }
 
+// Load Submitted Data
 const loadSubmittedData = async () => {
   try {
     submittedData.value = await getSubmittedForms()

@@ -240,6 +240,7 @@ const handleSubmit = async (values: any) => {
 
     await submitForm(formData)
     await loadSubmittedData()
+    alert('Form submitted successfully')
 
     resetForm()
   } catch (error) {

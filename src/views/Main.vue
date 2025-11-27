@@ -5,30 +5,28 @@
         <h1 class="mb-4 text-center">Form Assignment</h1>
 
         <div class="form-container">
-          <Form :initial-values="initialValues" @submit="handleSubmit" ref="formRef" v-slot="{ errors }">
+          <Form :initial-values="initialValues" :validation-schema="formSchema" @submit="handleSubmit" ref="formRef"
+            v-slot="{ meta: formMeta }">
             <h3 class="mb-4">Group Fields</h3>
-            <FieldArray name="groupFields" :rules="validateMinGroups" v-slot="{ fields, push, remove }">
+            <FieldArray name="groupFields" v-slot="{ fields, push, remove }">
               <GroupFieldForm v-for="(field, index) in fields" :key="String(field.key)" :id="String(field.key)"
                 :index="index" :can-remove="fields.length > 2" @remove="remove(index)" />
 
               <button type="button" class="btn btn-outline-primary btn-add-more" @click="addGroupField(push)">
                 + Add More
               </button>
-              <span v-if="errors.groupFields" class="error-message d-block mt-2">
-                {{ errors.groupFields }}
-              </span>
+              <ErrorMessage name="groupFields" class="error-message d-block mt-2" />
             </FieldArray>
 
             <hr class="my-4" />
 
             <div class="form-group">
-              <Field name="birthDate" :rules="validateRequired" v-slot="{ field, errors }">
+              <Field name="birthDate" v-slot="{ field, meta, handleBlur, handleChange }">
                 <label for="birthDate" class="form-label">Birth Date</label>
-                <input id="birthDate" v-bind="field" type="date" class="form-control"
-                  :class="{ 'is-invalid': errors.length > 0 }" />
-                <span v-if="errors.length > 0" class="error-message">
-                  {{ errors[0] }}
-                </span>
+                <input id="birthDate" :value="field.value || ''" type="date" class="form-control"
+                  :class="{ 'is-invalid': (meta.touched || meta.validated) && !meta.valid }"
+                  @input="(e) => handleChange((e.target as HTMLInputElement).value)" @blur="handleBlur" />
+                <ErrorMessage name="birthDate" class="error-message" />
                 <small v-if="field.value" class="text-muted d-block mt-1">
                   Formatted: {{ formatDate(field.value) }}
                 </small>
@@ -36,7 +34,7 @@
             </div>
 
             <div class="form-group">
-              <Field name="gender" :rules="validateRequired" v-slot="{ field, errors }">
+              <Field name="gender" v-slot="{ field }">
                 <label class="form-label">Gender</label>
                 <div>
                   <div class="form-check form-check-inline">
@@ -58,14 +56,12 @@
                     </label>
                   </div>
                 </div>
-                <span v-if="errors.length > 0" class="error-message">
-                  {{ errors[0] }}
-                </span>
+                <ErrorMessage name="gender" class="error-message" />
               </Field>
             </div>
 
             <div class="form-group">
-              <Field name="languages" :rules="validateRequired" v-slot="{ field, errors }">
+              <Field name="languages" v-slot="{ field, errors }">
                 <label class="form-label">Languages</label>
                 <div>
                   <div class="form-check">
@@ -93,21 +89,17 @@
                     </label>
                   </div>
                 </div>
-                <span v-if="errors.length > 0" class="error-message">
-                  {{ errors[0] }}
-                </span>
+
+                <ErrorMessage name="languages" class="error-message" />
               </Field>
             </div>
 
             <div class="form-group">
-              <Field name="cities" :rules="validateRequired" v-slot="{ field, errors }">
+              <Field name="cities" v-slot="{ field }">
                 <label for="cities" class="form-label">City</label>
                 <Multiselect id="cities" :model-value="field.value" :options="cityOptions" mode="tags"
-                  :close-on-select="false" placeholder="Select cities" :class="{ 'is-invalid': errors.length > 0 }"
-                  @update:model-value="field.onChange" />
-                <span v-if="errors.length > 0" class="error-message">
-                  {{ errors[0] }}
-                </span>
+                  :close-on-select="false" placeholder="Select cities" @update:model-value="field.onChange" />
+                <ErrorMessage name="cities" class="error-message" />
               </Field>
             </div>
 
@@ -137,12 +129,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Form, Field, FieldArray } from 'vee-validate'
+import { Form, Field, FieldArray, ErrorMessage } from 'vee-validate'
 import Multiselect from '@vueform/multiselect'
 import GroupFieldForm from '@/components/GroupFieldForm.vue'
 import FileUpload from '@/components/FileUpload.vue'
 import SubmittedDataTable from '@/components/SubmittedDataTable.vue'
-import { validateRequired, validateMinGroups } from '@/utils/validation'
+import { formSchema } from '@/utils/validation'
 import { formatDate } from '@/utils/formatters'
 import { submitForm, getSubmittedForms } from '@/services/api'
 import { cities } from '@/data/cities'

@@ -6,36 +6,41 @@
 
     <div class="row">
       <div class="col-md-4">
-        <Field :name="`groupFields.${index}.name`" :rules="validateRequired" v-slot="{ field, errors }">
+        <Field :name="`groupFields.${index}.name`" v-slot="{ field, meta, handleBlur, handleChange, errors }">
           <label :for="`name-${id}`" class="form-label">Name</label>
-          <input :id="`name-${id}`" v-bind="field" type="text" class="form-control"
-            :class="{ 'is-invalid': errors.length > 0 }" placeholder="Enter name" />
-          <span v-if="errors.length > 0" class="error-message">
+          <input :id="`name-${id}`" :value="field.value || ''" type="text" class="form-control"
+            :class="{ 'is-invalid': (meta.touched || meta.validated) && !meta.valid }" placeholder="Enter name"
+            @input="(e) => handleChange((e.target as HTMLInputElement).value)" @blur="handleBlur" />
+          <span v-if="errors && errors.length > 0" class="error-message">
             {{ errors[0] }}
           </span>
+          <ErrorMessage :name="`groupFields.${index}.name`" class="error-message" />
         </Field>
       </div>
 
       <div class="col-md-4">
-        <Field :name="`groupFields.${index}.email`" :rules="validateEmail" v-slot="{ field, errors }">
+        <Field :name="`groupFields.${index}.email`" v-slot="{ field, meta, handleBlur, handleChange, errors }">
           <label :for="`email-${id}`" class="form-label">Email</label>
-          <input :id="`email-${id}`" v-bind="field" type="email" class="form-control"
-            :class="{ 'is-invalid': errors.length > 0 }" placeholder="Enter email" />
-          <span v-if="errors.length > 0" class="error-message">
+          <input :id="`email-${id}`" :value="field.value || ''" type="email" class="form-control"
+            :class="{ 'is-invalid': (meta.touched || meta.validated) && !meta.valid }" placeholder="Enter email"
+            @input="(e) => handleChange((e.target as HTMLInputElement).value)" @blur="handleBlur" />
+          <span v-if="errors && errors.length > 0" class="error-message">
             {{ errors[0] }}
           </span>
+          <ErrorMessage :name="`groupFields.${index}.email`" class="error-message" />
         </Field>
       </div>
 
       <div class="col-md-4">
-        <Field :name="`groupFields.${index}.mobileNumber`" :rules="validatePhone" v-slot="{ field, errors }">
+        <Field :name="`groupFields.${index}.mobileNumber`" v-slot="{ field, meta, handleBlur, handleChange, errors }">
           <label :for="`mobile-${id}`" class="form-label">Mobile Number</label>
-          <input :id="`mobile-${id}`" v-bind="field" type="text" class="form-control"
-            :class="{ 'is-invalid': errors.length > 0 }" placeholder="(844) 448-0110"
-            @input="handlePhoneInput($event, field.onInput)" />
-          <span v-if="errors.length > 0" class="error-message">
+          <input :id="`mobile-${id}`" :value="field.value || ''" type="text" class="form-control"
+            :class="{ 'is-invalid': (meta.touched || meta.validated) && !meta.valid }" placeholder="(844) 448-0110"
+            @input="(e) => handlePhoneInput(e, handleChange)" @blur="handleBlur" />
+          <span v-if="errors && errors.length > 0" class="error-message">
             {{ errors[0] }}
           </span>
+          <ErrorMessage :name="`groupFields.${index}.mobileNumber`" class="error-message" />
         </Field>
       </div>
     </div>
@@ -43,8 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { Field } from 'vee-validate'
-import { validateRequired, validateEmail, validatePhone } from '@/utils/validation'
+import { Field, ErrorMessage } from 'vee-validate'
 import { formatPhoneNumber } from '@/utils/formatters'
 
 interface Props {
@@ -59,10 +63,10 @@ defineEmits<{
   remove: []
 }>()
 
-const handlePhoneInput = (event: Event, onInput: (value: string) => void) => {
+const handlePhoneInput = (event: Event, handleChange: (value: string) => void) => {
   const target = event.target as HTMLInputElement
   const formatted = formatPhoneNumber(target.value)
-  onInput(formatted)
+  handleChange(formatted)
 }
 </script>
 

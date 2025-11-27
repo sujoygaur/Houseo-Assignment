@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Field name="files" :rules="validateFileType" v-slot="{ field, errors }">
+    <Field name="files" v-slot="{ field }">
       <div class="file-upload-area" :class="{ 'dragover': isDragging }" @drop="handleDrop($event, field.onChange)"
         @dragover.prevent="isDragging = true" @dragleave="isDragging = false" @click="triggerFileInput">
         <input ref="fileInput" type="file" multiple accept=".jpeg,.jpg,.pdf" class="d-none"
@@ -20,17 +20,14 @@
         </div>
       </div>
 
-      <span v-if="errors.length > 0" class="error-message">
-        {{ errors[0] }}
-      </span>
+      <ErrorMessage name="files" class="error-message" />
     </Field>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { Field, useField } from 'vee-validate'
-import { validateFileType } from '@/utils/validation'
+import { Field, ErrorMessage, useField } from 'vee-validate'
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const files = ref<File[]>([])

@@ -42,9 +42,3 @@ export const validateFileType = (value: unknown): boolean | string => {
   return true
 }
 
-interface GroupField {
-  id: string
-  name: string
-  email: string
-  mobileNumber: string
-}

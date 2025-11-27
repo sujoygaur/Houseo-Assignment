@@ -8,25 +8,21 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Group Fields</th>
-            <th>Birth Date</th>
-            <th>Gender</th>
-            <th>Languages</th>
-            <th>Cities</th>
-            <th>Files</th>
-            <th>Submitted At</th>
+            <th class="text-nowrap">ID</th>
+            <th class="text-nowrap">Group Fields</th>
+            <th class="text-nowrap">Birth Date</th>
+            <th class="text-nowrap">Gender</th>
+            <th class="text-nowrap">Languages</th>
+            <th class="text-nowrap">Cities</th>
+            <th class="text-nowrap">Files</th>
+            <th class="text-nowrap">Submitted At</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in submittedData" :key="item.id">
             <td>{{ item.id }}</td>
             <td>
-              <div
-                v-for="(field, index) in item.groupFields"
-                :key="index"
-                class="mb-2"
-              >
+              <div v-for="(field, index) in item.groupFields" :key="index" class="mb-2">
                 <strong>{{ field.name }}</strong><br />
                 <small class="text-muted">{{ field.email }}</small><br />
                 <small class="text-muted">{{ field.mobileNumber }}</small>
@@ -35,20 +31,12 @@
             <td>{{ formatDate(item.birthDate) }}</td>
             <td>{{ item.gender }}</td>
             <td>
-              <span
-                v-for="(lang, index) in item.languages"
-                :key="index"
-                class="badge bg-primary me-1"
-              >
+              <span v-for="(lang, index) in item.languages" :key="index" class="badge bg-primary me-1">
                 {{ lang }}
               </span>
             </td>
             <td>
-              <span
-                v-for="(city, index) in item.cities"
-                :key="index"
-                class="badge bg-secondary me-1"
-              >
+              <span v-for="(city, index) in item.cities" :key="index" class="badge bg-secondary me-1">
                 {{ getCityLabel(city) }}
               </span>
             </td>
@@ -81,4 +69,3 @@ const getCityLabel = (cityValue: string): string => {
   return city ? city.label : cityValue
 }
 </script>
-

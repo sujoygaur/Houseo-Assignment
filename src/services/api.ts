@@ -27,9 +27,7 @@ const convertFileToObject = (file: File) => ({
   size: file.size,
 })
 
-export const submitForm = async (formData: FormData): Promise<SubmittedFormData> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
+export const submitForm = async (formData: FormData)=> {
       try {
         const submittedData: SubmittedFormData = {
           id: Date.now().toString(),
@@ -46,12 +44,9 @@ export const submitForm = async (formData: FormData): Promise<SubmittedFormData>
         existingData.push(submittedData)
         saveData(existingData)
 
-        resolve(submittedData)
       } catch (error) {
-        reject(new Error('Failed to submit form. Please try again.'))
+        throw new Error('Failed to submit form. Please try again.')
       }
-    }, 500)
-  })
 }
 
 export const getSubmittedForms = async (): Promise<SubmittedFormData[]> => {

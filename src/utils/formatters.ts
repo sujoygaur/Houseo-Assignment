@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const formatPhoneNumber = (value: string): string => {
   const numbers = value.replace(/\D/g, '')
 
@@ -10,22 +12,10 @@ export const formatPhoneNumber = (value: string): string => {
 
 export const formatDate = (dateString: string): string => {
   if (!dateString) return ''
-
-  const date = new Date(dateString)
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }
-
-  return date.toLocaleDateString('en-US', options)
+  return moment(dateString).format('MMMM DD, YYYY')
 }
 
 export const formatDateInput = (dateString: string): string => {
   if (!dateString) return ''
-  const date = new Date(dateString)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  return moment(dateString).format('YYYY-MM-DD')
 }
